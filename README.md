@@ -2,9 +2,7 @@
 ```
 PROJECT_ROOT=./
 
-DB_ROOT_PASSWORD=secret
 DB_NAME=project
 DB_USERNAME=project
-DB_PASSWORD=project
 
 ```
