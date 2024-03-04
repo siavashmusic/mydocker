@@ -4,11 +4,10 @@ FROM php:8.2-fpm
 # PHP extension
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions gd xdebug
-
 RUN install-php-extensions \
         gd \
         intl \
+        xdebug\
         mbstring \
         mcrypt \
         pdo \
