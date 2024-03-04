@@ -1,7 +1,8 @@
 .env
-/public/.DS_Store
+/backend/.DS_Store
 .DS_Store
 docker-config/.DS_Store
-public/.DS_Store
+backend/.DS_Store
 /docker-data/*
-docker-config/.DS_Store
+.DS_Store*
+.idea/
