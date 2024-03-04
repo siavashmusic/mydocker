@@ -1,16 +1,18 @@
-version: "2.1"
+version: "3.1"
 
 services:
     nginx:
+        env_file: .env
         build: ./docker-config/nginx/
         ports:
-            - 80:80
+            - "80:80"
         volumes:
-            - "${PROJECT_ROOT}:/var/www/html:ro"
+            - "${PROJECT_ROOT}:/var/www/html"
         networks:
             - server
         depends_on:
             - php
+
 
     php:
         build: ./docker-config/php/
@@ -23,25 +25,30 @@ services:
             - server
         depends_on:
             - mysql
+        env_file: .env
 
     mysql:
-        image: mysql:5.7
+        image: mysql:8.3.0
         ports:
-            - 3306:3306
+            - "3306:3306"
         volumes:
             - "${PROJECT_ROOT}/docker-data:/var/lib/mysql"
         networks:
             - database
         environment:
-            MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+            MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
             MYSQL_DATABASE: "${DB_NAME}"
             MYSQL_USER: "${DB_USERNAME}"
-            MYSQL_PASSWORD: "${DB_PASSWORD}"
+            MYSQL_PASSWORD_FILE: /run/secrets/db_password
+        secrets:
+            - db_root_password
+            - db_password
+        env_file: .env
 
     phpmyadmin:
-        image: phpmyadmin/phpmyadmin
+        image: arm64v8/phpmyadmin
         ports:
-            - 8080:80
+            - "8080:80"
         networks:
             - database
         depends_on:
@@ -49,6 +56,12 @@ services:
         environment:
             - PMA_HOST= mysql
             - PMA_ARBITRARY=1
+
+secrets:
+    db_password:
+        file: db_password.txt
+    db_root_password:
+        file: db_root_password.txt
 
 volumes:
     data:
